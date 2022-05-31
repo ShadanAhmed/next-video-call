@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import useAuth from "../hooks/useAuth";
 import Router from "next/router";
+import Loader from "../components/Loader";
 
 const Join = dynamic(
   () => {
@@ -15,9 +16,9 @@ export default function Home() {
   const { loading, isLoggedIn, user } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    <Loader />;
   } else if (!isLoggedIn) {
-    Router.push("/login");
+    Router.push("/login?st=true");
   }
 
   return (

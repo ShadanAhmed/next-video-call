@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import useAgora from "../../hooks/useAgora";
 import MediaPlayer from "./MediaPlayer";
@@ -29,6 +29,10 @@ import SideBar from "./SideBar/SideBar";
 import AgoraRTM, { RtmChannel } from "agora-rtm-sdk";
 import axios from "axios";
 import ClickAwayListener from "react-click-away-listener";
+import CallGrid from "./CallGrid";
+
+import Loading from "../Loader";
+import Loader from "../Loader";
 
 function Call({ user: currentUser }) {
   const router = useRouter();
@@ -47,7 +51,7 @@ function Call({ user: currentUser }) {
 
   const [members, setMembers] = useState([]);
   const [currentTimeString, setCurrentTimeString] = useState("");
-  const [screenWidth, setScreenWidth] = useState(0);
+
   const [sideBar, setSideBar] = useState({
     visible: false,
     current: 1,
@@ -61,10 +65,9 @@ function Call({ user: currentUser }) {
   const [currentMessage, setCurrentMessage] = useState({});
   const [showPoppup, setShowPoppup] = useState(false);
   const [newMessage, setNewMessage] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setScreenWidth(document.body.scrollWidth);
-  }, [document.body.scrollWidth]);
+  const bodyContainer = useRef();
 
   useEffect(() => {
     console.log({ remoteUsers });
@@ -89,6 +92,7 @@ function Call({ user: currentUser }) {
         let firebaseUser = await (await getUser(user.uid)).data();
         console.log({ firebaseUser });
         memberArr.push(firebaseUser);
+        console.log("is current user", user.uid == currentUser.uid);
         console.log({ memberArr });
         setMembers([...members, ...memberArr]);
         if (firebaseUser.uid === currentUser.uid)
@@ -136,6 +140,10 @@ function Call({ user: currentUser }) {
 
   const joinMeeting = async (channel) => {
     const meeting = (await getChannel(channel)).data();
+    if (!meeting) {
+      router.push("/?st=1");
+      return;
+    }
     setMeeting(meeting);
 
     if (meeting.createdBy !== currentUser.uid) {
@@ -272,24 +280,26 @@ function Call({ user: currentUser }) {
     );
   }, [currentMessage]);
 
-  // copy first six element of remoteUsers into a new variable and if it length is less than six then add until its len
-  let remoteUsersList = remoteUsers.slice(0, 6);
+  useEffect(() => {
+    if (members.length > 0) {
+      setLoading(false);
+    }
+  }, [members]);
 
   console.log({ members });
 
   const remoteUserAvailable = remoteUsers.length > 0;
 
-  console.log({ screenWidth });
-
-  let isTabWidth = screenWidth <= 768;
-  let isMobileWidth = screenWidth <= 480;
-
-  const columns = isTabWidth ? 2 : 3;
-  const rows = isTabWidth <= 768 ? 3 : 2;
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <>
-      <div className="call bg-gray-800 h-screen w-full relative text-white font-Poppins">
+      <div
+        ref={bodyContainer}
+        className="call bg-gray-800 h-screen w-full relative text-white font-Poppins"
+      >
         <div
           className={`player-container relative m-auto ${
             sideBar.visible ? "flex justify-between" : ""
@@ -300,138 +310,24 @@ function Call({ user: currentUser }) {
             className={`w-full h-full transition-all relative`}
             style={sideBar.visible ? { width: "74%" } : {}}
           >
-            <div
-              className={`${
-                remoteUserAvailable
-                  ? `absolute ${
-                      isMobileWidth ? "right-2" : "right-8"
-                    } bottom-8 z-10 shadow-sm  w-56 h-32`
-                  : " w-full h-full "
-              } transition-all `}
-            >
-              <div className="local-player-wrapper relative w-full h-full">
-                <div
-                  className={`
-                ${
-                  remoteUserAvailable
-                    ? "current-user-wrapper overflow-hidden bg-gray-700"
-                    : "current-user-wrapper overflow-hidden m-auto bg-none"
-                }  h-full relative rounded-md`}
-                  style={remoteUserAvailable ? {} : { maxWidth: "1200px" }}
-                >
-                  <MediaPlayer
-                    videoTrack={!videoOff ? localVideoTrack : undefined}
-                    audioTrack={undefined}
-                  ></MediaPlayer>
-                  <span
-                    className={`absolute left-2 text-white drop-shadow-sm ${
-                      remoteUserAvailable ? "bottom-1" : "bottom-3"
-                    }`}
-                  >
-                    You
-                  </span>
-                  <div
-                    className={`bg-gray-600 rounded-full absolute ${
-                      videoOff ? "" : "hidden"
-                    }`}
-                    style={{
-                      left: "50%",
-                      top: "50%",
-                      transform: "translate(-50%, -50%)",
-                      width: remoteUserAvailable ? "50px" : "150px",
-                      height: remoteUserAvailable ? "50px" : "150px",
-                    }}
-                  >
-                    {members.find(
-                      (member) => member.userId === currentUser.uid
-                    ) != null ? (
-                      <img
-                        src={
-                          members.find(
-                            (member) => member.userId === currentUser.uid
-                          ).imageUrl
-                        }
-                        alt=""
-                        className="object-cover w-full h-full rounded-full"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div
-              className={`${
-                remoteUserAvailable
-                  ? "w-full h-full flex flex-wrap justify-around"
-                  : ""
-              }`}
-            >
-              {remoteUsersList.map((user) => (
-                <div
-                  className={`remote-player-wrapper h-full overflow-hidden  relative rounded-md`}
-                  style={{
-                    maxWidth: "1200px",
-                    width: `calc(${
-                      remoteUsersList.length > 2
-                        ? 100 / columns
-                        : remoteUsersList.length == 2
-                        ? 100 / (columns - 1)
-                        : 100
-                    }% - ${remoteUsersList.length > 1 ? 20 : 0}px)`,
-                    height: `calc(${
-                      remoteUsersList.length > (isTabWidth ? 1 : columns)
-                        ? 100 / rows
-                        : 100
-                    }% - ${remoteUsersList.length > columns ? 20 : 0}px)`,
-                    margin: remoteUsersList.length > 1 ? "10px" : "auto",
-                  }}
-                  key={user.uid}
-                >
-                  <MediaPlayer
-                    videoTrack={user.videoTrack}
-                    audioTrack={user.audioTrack}
-                  ></MediaPlayer>
-                  <span className="absolute left-2 text-white drop-shadow-sm bottom-3">
-                    {members.find((member) => member.userId === user.uid) !=
-                    null
-                      ? members.find((member) => member.userId === user.uid)
-                          .name
-                      : "Connecting..."}
-                  </span>
-                  <div
-                    className={`bg-gray-600 rounded-full absolute transition-opacity ${
-                      user.videoTrack ? "opacity-0" : ""
-                    }`}
-                    style={{
-                      width: "150px",
-                      height: "150px",
-                      left: "50%",
-                      top: "50%",
-                      transform: "translate(-50%, -50%)",
-                    }}
-                  >
-                    {members.find((member) => member.userId === user.uid) !=
-                    null ? (
-                      <img
-                        src={
-                          members.find((member) => member.userId === user.uid)
-                            .imageUrl
-                        }
-                        alt=""
-                        className="object-cover w-full h-full rounded-full"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <> </>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <CallGrid
+              members={members}
+              maxCol={3}
+              maxRow={2}
+              remoteUsers={remoteUsers.map((user) => {
+                return {
+                  userId: user.uid,
+                  videoTrack: user.videoTrack,
+                  audioTrack: user.audioTrack,
+                };
+              })}
+              currentUser={{
+                userId: currentUser.uid,
+                videoTrack: localVideoTrack,
+                audioTrack: null,
+              }}
+              videoOff={videoOff}
+            />
           </div>
           <SideBar
             close={() => setSideBar({ visible: false })}
@@ -443,42 +339,22 @@ function Call({ user: currentUser }) {
             rtmChannel={rtmChannel}
             messages={messages}
             addMessage={(message) => setMessages([...messages, message])}
-            isTabWidth={isTabWidth}
+            isTabWidth={bodyContainer.current?.scrollWidth <= 768}
             setNewMessage={(e) => setNewMessage(e)}
           />
         </div>
         <div
-          className={`grid ${
-            isMobileWidth
-              ? "grid-cols-[4fr_1fr]"
-              : !isTabWidth
-              ? "grid-cols-[1fr_2fr_1fr]"
-              : "grid-cols-[3fr_1fr]"
-          }`}
+          className={`grid bottom-bar-grid grid-cols-[1fr_2fr_1fr]`}
           style={{ height: "calc(10% - 20px)" }}
         >
-          {!isTabWidth && (
-            <div className="info pl-6 flex items-center">
-              <span className="text-base font-bold">{currentTimeString}</span>
-              <span className="text-base px-2"> | </span>
-              <span className="text-base font-bold">
-                {router.query.channel}
-              </span>
-            </div>
-          )}
-          <div
-            className={`controls flex items-center ${
-              isMobileWidth
-                ? "justify-start pl-8"
-                : !isTabWidth
-                ? "justify-center"
-                : "justify-start pl-8"
-            }`}
-          >
+          <div className="hide-in-tab-width info pl-6 flex items-center">
+            <span className="text-base font-bold">{currentTimeString}</span>
+            <span className="text-base px-2"> | </span>
+            <span className="text-base font-bold">{router.query.channel}</span>
+          </div>
+          <div className={`controls flex items-center justify-center`}>
             <div
-              className={`rounded-full p-4 bg-gray-700 ${
-                isMobileWidth ? "mr-8" : "mr-4"
-              }`}
+              className={`rounded-full p-4 bg-gray-700 mr-4`}
               onClick={() => {
                 toggleMic();
                 setMuted(!muted);
@@ -487,9 +363,7 @@ function Call({ user: currentUser }) {
               {muted ? <FaMicrophoneAltSlash /> : <FaMicrophone />}
             </div>
             <div
-              className={`rounded-full p-4 bg-gray-700  ${
-                isMobileWidth ? "mr-8" : "mr-4"
-              }`}
+              className={`rounded-full p-4 bg-gray-700 mr-4`}
               onClick={() => {
                 toggleVideo();
                 setVideoOff(!videoOff);
@@ -508,130 +382,127 @@ function Call({ user: currentUser }) {
               <ImPhoneHangUp />
             </div>
           </div>
-          {!isMobileWidth ? (
-            <div className="sub-controls  flex items-center justify-end pr-8">
-              <button
-                className={`text-2xl mr-8 ${
-                  sideBar?.current === 1 && sideBar?.visible
-                    ? "text-blue-300"
-                    : ""
-                }`}
-                onClick={() =>
-                  setSideBar({
-                    visible: sideBar?.current !== 1 ? true : !sideBar.visible,
-                    current: 1,
-                  })
-                }
-              >
-                <AiOutlineInfoCircle />
-              </button>
-              <button
-                className={`text-2xl mr-8  relative ${
-                  sideBar?.current === 2 && sideBar?.visible
-                    ? "text-blue-300"
-                    : ""
-                }`}
-                onClick={() =>
-                  setSideBar({
-                    visible: sideBar?.current !== 2 ? true : !sideBar.visible,
-                    current: 2,
-                  })
-                }
-              >
-                <MdOutlinePeopleAlt />
-                <span class="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
-                  {members.length}
-                </span>
-              </button>
-              <button
-                className={`text-2xl relative ${
-                  sideBar?.current === 3 && sideBar?.visible
-                    ? "text-blue-300"
-                    : ""
-                }`}
-                onClick={() =>
-                  setSideBar({
-                    visible: sideBar?.current !== 3 ? true : !sideBar.visible,
-                    current: 3,
-                  })
-                }
-              >
-                <BsFillChatLeftTextFill />
-                {newMessage && (
-                  <span
-                    className="rounded-full bg-blue-600"
-                    style={{
-                      width: "10px",
-                      height: "10px",
-                      position: "absolute",
-                      top: "-5px",
-                      right: "-5px",
-                    }}
-                  ></span>
-                )}
-              </button>
-            </div>
-          ) : (
-            <div className="sub-controls  flex items-center justify-end pr-8 relative">
-              {showPoppup && (
-                <ClickAwayListener onClickAway={() => setShowPoppup(false)}>
-                  <div className="sub-controls  flex items-start justify-center p-4 bg-white w-40 flex-col absolute bottom-16 text-black z-40">
-                    <button
-                      className="text-2xl mb-8 flex justify-between w-full"
-                      onClick={() => {
-                        setSideBar({
-                          visible:
-                            sideBar?.current !== 1 ? true : !sideBar.visible,
-                          current: 1,
-                        });
-                        setShowPoppup(false);
-                      }}
-                    >
-                      <AiOutlineInfoCircle />
-                      <span className="text-base font-bold">Info</span>
-                    </button>
-                    <button
-                      className="text-2xl mb-8 flex justify-between w-full"
-                      onClick={() => {
-                        setSideBar({
-                          visible:
-                            sideBar?.current !== 2 ? true : !sideBar.visible,
-                          current: 2,
-                        });
-                        setShowPoppup(false);
-                      }}
-                    >
-                      <div className="relative">
-                        <MdOutlinePeopleAlt />
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
-                          {members.length}
-                        </span>
-                      </div>
-                      <span className="text-base font-bold">Members</span>
-                    </button>
-                    <button
-                      className="text-xl flex justify-between w-full"
-                      onClick={() => {
-                        setSideBar({
-                          visible:
-                            sideBar?.current !== 3 ? true : !sideBar.visible,
-                          current: 3,
-                        });
-                        setShowPoppup(false);
-                      }}
-                    >
-                      <BsFillChatLeftTextFill />
-                      <span className="text-base font-bold">Chat</span>
-                    </button>
-                  </div>
-                </ClickAwayListener>
+          <div className="sub-controls hide-on-mobile-width flex items-center justify-end pr-8">
+            <button
+              className={`text-2xl mr-8 ${
+                sideBar?.current === 1 && sideBar?.visible
+                  ? "text-blue-300"
+                  : ""
+              }`}
+              onClick={() =>
+                setSideBar({
+                  visible: sideBar?.current !== 1 ? true : !sideBar.visible,
+                  current: 1,
+                })
+              }
+            >
+              <AiOutlineInfoCircle />
+            </button>
+            <button
+              className={`text-2xl mr-8  relative ${
+                sideBar?.current === 2 && sideBar?.visible
+                  ? "text-blue-300"
+                  : ""
+              }`}
+              onClick={() =>
+                setSideBar({
+                  visible: sideBar?.current !== 2 ? true : !sideBar.visible,
+                  current: 2,
+                })
+              }
+            >
+              <MdOutlinePeopleAlt />
+              <span class="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
+                {members.length}
+              </span>
+            </button>
+            <button
+              className={`text-2xl relative ${
+                sideBar?.current === 3 && sideBar?.visible
+                  ? "text-blue-300"
+                  : ""
+              }`}
+              onClick={() =>
+                setSideBar({
+                  visible: sideBar?.current !== 3 ? true : !sideBar.visible,
+                  current: 3,
+                })
+              }
+            >
+              <BsFillChatLeftTextFill />
+              {newMessage && (
+                <span
+                  className="rounded-full bg-blue-600"
+                  style={{
+                    width: "10px",
+                    height: "10px",
+                    position: "absolute",
+                    top: "-5px",
+                    right: "-5px",
+                  }}
+                ></span>
               )}
-              <IoIosArrowUp
-                className="font-bold text-2xl"
-                onClick={() => setShowPoppup(true)}
-              />
-            </div>
-          )}
+            </button>
+          </div>
+          <div className="sub-controls show-on-mobile-width flex items-center justify-end pr-8 relative">
+            {showPoppup && (
+              <ClickAwayListener onClickAway={() => setShowPoppup(false)}>
+                <div className="sub-controls  flex items-start justify-center p-4 bg-white w-40 flex-col absolute bottom-16 text-black z-40">
+                  <button
+                    className="text-2xl mb-8 flex justify-between w-full"
+                    onClick={() => {
+                      setSideBar({
+                        visible:
+                          sideBar?.current !== 1 ? true : !sideBar.visible,
+                        current: 1,
+                      });
+                      setShowPoppup(false);
+                    }}
+                  >
+                    <AiOutlineInfoCircle />
+                    <span className="text-base font-bold">Info</span>
+                  </button>
+                  <button
+                    className="text-2xl mb-8 flex justify-between w-full"
+                    onClick={() => {
+                      setSideBar({
+                        visible:
+                          sideBar?.current !== 2 ? true : !sideBar.visible,
+                        current: 2,
+                      });
+                      setShowPoppup(false);
+                    }}
+                  >
+                    <div className="relative">
+                      <MdOutlinePeopleAlt />
+                      <span class="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
+                        {members.length}
+                      </span>
+                    </div>
+                    <span className="text-base font-bold">Members</span>
+                  </button>
+                  <button
+                    className="text-xl flex justify-between w-full"
+                    onClick={() => {
+                      setSideBar({
+                        visible:
+                          sideBar?.current !== 3 ? true : !sideBar.visible,
+                        current: 3,
+                      });
+                      setShowPoppup(false);
+                    }}
+                  >
+                    <BsFillChatLeftTextFill />
+                    <span className="text-base font-bold">Chat</span>
+                  </button>
+                </div>
+              </ClickAwayListener>
+            )}
+            <IoIosArrowUp
+              className="font-bold text-2xl"
+              onClick={() => setShowPoppup(true)}
+            />
+          </div>
         </div>
       </div>
       <ToastContainer

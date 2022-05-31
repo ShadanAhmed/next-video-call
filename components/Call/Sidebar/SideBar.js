@@ -46,21 +46,9 @@ const SideBar = ({
 
   return (
     <div
-      className={`py-4 px-6 rounded-md bg-white h-full text-black  relative transition-all duration-1000 ${
+      className={`sideBar py-4 px-6 rounded-md bg-white h-full text-black  relative transition-all duration-1000 ${
         !visible ? "w-0 left-8 hidden" : "w-1/4 left-0"
       }`}
-      style={
-        isTabWidth
-          ? {
-              width: "100vw",
-              height: "100vh",
-              position: "absolute",
-              zIndex: 30,
-              top: 0,
-              borderRadius: 0,
-            }
-          : {}
-      }
     >
       <div className="title-continer flex justify-between">
         <h3 className="text-lg unselectable">{title}</h3>
