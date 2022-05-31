@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import AgoraRTC from "agora-rtc-sdk-ng";
 import useAgora from "../../hooks/useAgora";
-import MediaPlayer from "./MediaPlayer";
 import Agora, { RtcTokenBuilder, RtmTokenBuilder } from "agora-access-token";
 import { useRouter } from "next/router";
 const client = AgoraRTC.createClient({ codec: "h264", mode: "rtc" });
@@ -13,12 +12,8 @@ import {
   FaMicrophone,
   FaMicrophoneAltSlash,
   FaVideo,
-  FaInfoCircle,
-  FaUser,
   FaVideoSlash,
-  FaPhone,
 } from "react-icons/fa";
-import { FiMoreVertical } from "react-icons/fi";
 import { ImPhoneHangUp } from "react-icons/im";
 import { IoIosArrowUp } from "react-icons/io";
 import { AiOutlineInfoCircle } from "react-icons/ai";
@@ -26,20 +21,19 @@ import { MdOutlinePeopleAlt } from "react-icons/md";
 import { BsFillChatLeftTextFill } from "react-icons/bs";
 import { Constants } from "../../utils/Constants";
 import SideBar from "./SideBar/SideBar";
-import AgoraRTM, { RtmChannel } from "agora-rtm-sdk";
+import AgoraRTM from "agora-rtm-sdk";
 import axios from "axios";
 import ClickAwayListener from "react-click-away-listener";
 import CallGrid from "./CallGrid";
 
-import Loading from "../Loader";
 import Loader from "../Loader";
+import Head from "next/head";
 
 function Call({ user: currentUser }) {
   const router = useRouter();
-  const { getUser, getChannel, updateChannel } = useFirestore(db);
+  const { getUser, getChannel } = useFirestore(db);
 
   const {
-    localAudioTrack,
     localVideoTrack,
     leave,
     join,
@@ -135,6 +129,7 @@ function Call({ user: currentUser }) {
       setVideoOff(!videoOff);
       toggleMic();
       setMuted(!muted);
+      setLoading(false);
     }
   }, [joinState]);
 
@@ -171,6 +166,7 @@ function Call({ user: currentUser }) {
       console.log({ rtmToken });
       joinRtm(rtmToken, channel);
       join(Constants.APP_ID, meeting.token, meeting.channel, currentUser.uid);
+      console.timeEnd("Execution time");
     }
     console.log(router.query);
   };
@@ -199,13 +195,15 @@ function Call({ user: currentUser }) {
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      injectStyle();
-    }
+    console.time("Execution time");
+
     joinMeeting(router.query.channel);
     setCurrentTimeString(
       new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
     );
+    if (typeof window !== "undefined") {
+      injectStyle();
+    }
     let currentSeconds = new Date().getSeconds();
     let timeout = setInterval(() => {
       setCurrentTimeString(
@@ -280,15 +278,7 @@ function Call({ user: currentUser }) {
     );
   }, [currentMessage]);
 
-  useEffect(() => {
-    if (members.length > 0) {
-      setLoading(false);
-    }
-  }, [members]);
-
   console.log({ members });
-
-  const remoteUserAvailable = remoteUsers.length > 0;
 
   if (loading) {
     return <Loader />;
@@ -300,6 +290,11 @@ function Call({ user: currentUser }) {
         ref={bodyContainer}
         className="call bg-gray-800 h-screen w-full relative text-white font-Poppins"
       >
+        <Head>
+          <title>Meet - {router.query.channel}</title>
+          <meta name="description" content="Meeting created on shadan meet" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
         <div
           className={`player-container relative m-auto ${
             sideBar.visible ? "flex justify-between" : ""
