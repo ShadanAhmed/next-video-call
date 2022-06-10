@@ -173,8 +173,8 @@ function Call({ user: currentUser }) {
 
   const recieveMessage = (message, memberId) => {
     console.log(messages);
-    const message = { message: message.text, sendBy: memberId };
-    setCurrentMessage(message);
+    const msg = { message: message.text, sendBy: memberId };
+    setCurrentMessage(msg);
     console.log(messages);
   };
 
