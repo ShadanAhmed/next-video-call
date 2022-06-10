@@ -6,6 +6,11 @@ const CallVideoItem = ({ member, videoTrack, audioTrack }) => {
   useEffect(() => {
     console.log({ videoTrack: member.videoTrack });
   }, [member.videoTrack]);
+
+  useEffect(() => {
+    member.imageUrl = member.imageUrl.slice(0, member.imageUrl.length - 4);
+  }, []);
+
   return (
     <div
       key={member.userId}
@@ -33,7 +38,7 @@ const CallVideoItem = ({ member, videoTrack, audioTrack }) => {
           }}
         >
           <img
-            src={member.imageUrl}
+            src={member.imageUrl + "160-c"}
             alt=""
             className="object-cover w-full h-full rounded-full"
             referrerPolicy="no-referrer"
