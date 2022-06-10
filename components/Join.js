@@ -105,13 +105,13 @@ export default function Home({ user }) {
       </Head>
 
       <div className=" h-screen">
-        <div class=" mb-4 relative items-center justify-center flex">
+        <div className=" mb-4 relative items-center justify-center flex">
           <div
             className="m-10 flex h-12 collapse-on-tab-width"
             style={{ width: "min(500px, 90vw)" }}
           >
             <button
-              class="shadow-sm w-1/2 mb-0 text-white bg-green-800 border-0 py-2 px-6 focus:outline-none transition-all duration-500 hover:bg-green-900 rounded text-lg"
+              className="shadow-sm w-1/2 mb-0 text-white bg-green-800 border-0 py-2 px-6 focus:outline-none transition-all duration-500 hover:bg-green-900 rounded text-lg"
               onClick={createMeeting}
             >
               New meeting
@@ -122,7 +122,7 @@ export default function Home({ user }) {
               id="channel"
               name="channel"
               autoCorrect="off"
-              class="shadow-md  ml-4 flex-row-reverse w-full bg-gray-600 rounded border border-gray-500 text-white focus:border-gray-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+              className="shadow-md  ml-4 flex-row-reverse w-full bg-gray-600 rounded border border-gray-500 text-white focus:border-gray-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               placeholder="Enter a code"
               onChange={(event) => {
                 setChannel(event.target.value.toLowerCase());

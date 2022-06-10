@@ -28,7 +28,7 @@ const Input = ({
           onChange(e);
         }}
         value={value}
-        class="text-sm outline-none focus:outline bg-transparent border-none w-10/12 text-grey-800 placeholder:text-color-grey-700 max-h-24 overflow-auto custom-scroll"
+        className="text-sm outline-none focus:outline bg-transparent border-none w-10/12 text-grey-800 placeholder:text-color-grey-700 max-h-24 overflow-auto custom-scroll"
         style={{ marginRight: 100 / 12 + "%", resize: "none" }}
         placeholder={placeholder}
         data-max-row={5}

@@ -407,7 +407,7 @@ function Call({ user: currentUser }) {
               }
             >
               <MdOutlinePeopleAlt />
-              <span class="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
+              <span className="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
                 {members.length}
               </span>
             </button>
@@ -475,7 +475,7 @@ function Call({ user: currentUser }) {
                       <div>
                         <MdOutlinePeopleAlt />
                       </div>
-                      <span class="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
+                      <span className="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
                         {members.length}
                       </span>
                     </div>
