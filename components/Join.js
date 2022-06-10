@@ -121,11 +121,13 @@ export default function Home({ user }) {
               type="channel"
               id="channel"
               name="channel"
+              autoCorrect="off"
               class="shadow-md  ml-4 flex-row-reverse w-full bg-gray-600 rounded border border-gray-500 text-white focus:border-gray-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               placeholder="Enter a code"
               onChange={(event) => {
-                setChannel(event.target.value);
+                setChannel(event.target.value.toLowerCase());
               }}
+              value={channel}
               onKeyDown={(event) => {
                 if (event.key === "Enter") {
                   router.push(`/${channel}`);

@@ -288,7 +288,7 @@ function Call({ user: currentUser }) {
     <>
       <div
         ref={bodyContainer}
-        className="call bg-gray-800 h-screen w-full relative text-white font-Poppins"
+        className="call bg-gray-800 h-screen w-full relative text-white font-Poppins overflow-hidden"
       >
         <Head>
           <title>Meet - {router.query.channel}</title>
@@ -442,9 +442,9 @@ function Call({ user: currentUser }) {
           <div className="sub-controls show-on-mobile-width flex items-center justify-end pr-8 relative">
             {showPoppup && (
               <ClickAwayListener onClickAway={() => setShowPoppup(false)}>
-                <div className="sub-controls  flex items-start justify-center p-4 bg-white w-40 flex-col absolute bottom-16 text-black z-40">
+                <div className="shadow-md sub-controls  flex items-start justify-center p-4 bg-white w-56 rounded-md flex-col absolute bottom-10 text-black z-40 right-8">
                   <button
-                    className="text-2xl mb-8 flex justify-between w-full"
+                    className="text-2xl mb-8 flex w-full"
                     onClick={() => {
                       setSideBar({
                         visible:
@@ -454,11 +454,14 @@ function Call({ user: currentUser }) {
                       setShowPoppup(false);
                     }}
                   >
-                    <AiOutlineInfoCircle />
-                    <span className="text-base font-bold">Info</span>
+                    <div>
+                      <AiOutlineInfoCircle />
+                    </div>
+
+                    <span className="text-base font-bold ml-6">Info</span>
                   </button>
                   <button
-                    className="text-2xl mb-8 flex justify-between w-full"
+                    className="text-2xl mb-8 flex w-full"
                     onClick={() => {
                       setSideBar({
                         visible:
@@ -469,15 +472,17 @@ function Call({ user: currentUser }) {
                     }}
                   >
                     <div className="relative">
-                      <MdOutlinePeopleAlt />
+                      <div>
+                        <MdOutlinePeopleAlt />
+                      </div>
                       <span class="absolute top-0 right-0 inline-flex items-center justify-between px-2 py-1 text-xs font-bold leading-none text-red-100 transform translate-x-1/2 -translate-y-1/2 bg-gray-400 rounded-full">
                         {members.length}
                       </span>
                     </div>
-                    <span className="text-base font-bold">Members</span>
+                    <span className="text-base font-bold ml-6">Members</span>
                   </button>
                   <button
-                    className="text-xl flex justify-between w-full"
+                    className="text-xl flex w-full"
                     onClick={() => {
                       setSideBar({
                         visible:
@@ -487,15 +492,19 @@ function Call({ user: currentUser }) {
                       setShowPoppup(false);
                     }}
                   >
-                    <BsFillChatLeftTextFill />
-                    <span className="text-base font-bold">Chat</span>
+                    <div>
+                      <BsFillChatLeftTextFill />
+                    </div>
+                    <span className="text-base font-bold ml-6">Chat</span>
                   </button>
                 </div>
               </ClickAwayListener>
             )}
             <IoIosArrowUp
               className="font-bold text-2xl"
-              onClick={() => setShowPoppup(true)}
+              onClick={() => {
+                if (showPoppup == false) setShowPoppup(true);
+              }}
             />
           </div>
         </div>

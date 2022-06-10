@@ -46,9 +46,14 @@ const SideBar = ({
 
   return (
     <div
-      className={`sideBar py-4 px-6 rounded-md bg-white h-full text-black  relative transition-all duration-1000 ${
-        !visible ? "w-0 left-8 hidden" : "w-1/4 left-0"
+      className={`sideBar py-4 px-6 rounded-md bg-white h-full text-black  relative  duration-3000 ${
+        !visible
+          ? isTabWidth
+            ? "left-96 hidden"
+            : " left-8 hidden"
+          : "w-1/4 left-0"
       }`}
+      style={{ transitionProperty: "left" }}
     >
       <div className="title-continer flex justify-between">
         <h3 className="text-lg unselectable">{title}</h3>

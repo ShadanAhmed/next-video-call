@@ -93,7 +93,11 @@ button {
     display: none;
   }
   .show-on-mobile-width {
-    display: block;
+    display: block !important;
+  }
+  .show-on-mobile-width svg {
+    margin-left: auto;
+    height: 100%;
   }
 }
 .show-on-mobile-width {
@@ -170,6 +174,10 @@ button {
   .collapse-on-tab-width input {
     margin-left: 0;
   }
+}
+
+.agora_video_player {
+  object-fit: contain !important;
 }
 
 .blue-circle {
