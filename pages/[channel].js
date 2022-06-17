@@ -2,7 +2,7 @@
 import useAuth from "../hooks/useAuth";
 
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
+import Router from "next/router";
 import Loader from "../components/Loader";
 
 const Call = dynamic(
@@ -13,11 +13,10 @@ const Call = dynamic(
 );
 
 export default function Home() {
-  const router = useRouter();
   const { loading, user, isLoggedIn } = useAuth();
 
   if (loading) return <Loader />;
-  else if (!isLoggedIn) router.push("/login?st=true");
+  else if (!isLoggedIn) Router.push("/login?st=true");
   return (
     <div>
       <Call user={user} />
