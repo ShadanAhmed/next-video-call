@@ -31,13 +31,14 @@ const InfoSideBar = () => {
     <div className="pl-2">
       <h4 className="text-md font-bold unselectable">Joining info</h4>
       <p className="text-gray-700 pt-1 text-sm">
-        https://next-video-call-lys8lrn57-shadanahmed.vercel.app/
+        https://next-video-call.vercel.app/
         {Router.query.channel}
       </p>
       <button
         className="text-blue-500 text-sm font-bold pt-4 unselectable"
         onClick={() =>
-          copyToClipboard(`http://localhost:3000/${Router.query.channel}`)
+          copyToClipboard(`https://next-video-call.vercel.app/
+          ${Router.query.channel}`)
         }
       >
         <span className="text-lg">
