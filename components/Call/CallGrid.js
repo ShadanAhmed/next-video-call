@@ -108,6 +108,7 @@ const CallGrid = ({
           >
             {currentItems.map((member, index) => (
               <CallVideoItem
+                key={index}
                 member={member}
                 videoTrack={
                   member.userId === currentUser.userId
@@ -134,6 +135,7 @@ const CallGrid = ({
         >
           {currentItems.map((member, index) => (
             <CallVideoItem
+              key={index}
               member={member}
               videoTrack={
                 member.userId === currentUser.userId
@@ -160,6 +162,7 @@ const CallGrid = ({
           >
             {currentItems.map((member, index) => (
               <CallVideoItem
+                key={index}
                 member={member}
                 videoTrack={
                   member.userId === currentUser.userId

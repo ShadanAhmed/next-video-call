@@ -56,10 +56,14 @@ const InfoSideBar = ({ members, createdBy, isTabWidth }) => {
         </h5>
 
         {filteredMember.length > 0 ? (
-          filteredMember.map((member) => {
+          filteredMember.map((member, index) => {
             console.log({ member, createdBy });
             return (
-              <MemberInfo member={member} host={createdBy == member.userId} />
+              <MemberInfo
+                key={index}
+                member={member}
+                host={createdBy == member.userId}
+              />
             );
           })
         ) : (
