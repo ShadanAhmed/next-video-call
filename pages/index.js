@@ -18,7 +18,7 @@ export default function Home() {
   if (loading) {
     <Loader />;
   } else if (!isLoggedIn) {
-    Router.push("/login?st=true");
+    Router.push("/login");
   }
 
   return (
