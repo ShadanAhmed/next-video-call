@@ -13,10 +13,11 @@ const Call = dynamic(
 );
 
 export default function Home() {
+  const router = useRouter();
   const { loading, user, isLoggedIn } = useAuth();
 
   if (loading) return <Loader />;
-  else if (!isLoggedIn) useRouter().push("/login?st=true");
+  else if (!isLoggedIn) router.push("/login?st=true");
   return (
     <div>
       <Call user={user} />
