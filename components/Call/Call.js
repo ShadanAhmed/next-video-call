@@ -20,7 +20,7 @@ import { AiOutlineInfoCircle } from "react-icons/ai";
 import { MdOutlinePeopleAlt } from "react-icons/md";
 import { BsFillChatLeftTextFill } from "react-icons/bs";
 import { Constants } from "../../utils/Constants";
-import SideBar from "./SideBar/SideBar";
+import SideBar from "./Sidebar/SideBar";
 import AgoraRTM from "agora-rtm-sdk";
 import axios from "axios";
 import ClickAwayListener from "react-click-away-listener";
