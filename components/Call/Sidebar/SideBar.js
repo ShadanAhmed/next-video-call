@@ -19,7 +19,7 @@ const SideBar = ({
   setNewMessage,
 }) => {
   if (visible) {
-    window.history.replaceState(null, null, `?sideBar=${currentSideBarNo}`);
+    window.history.pushState(null, null, `?sideBar=${currentSideBarNo}`);
   }
   console.log(currentSideBarNo);
   let title;

@@ -26,7 +26,7 @@ const CallVideoItem = ({ member, videoTrack, audioTrack }) => {
 
       {!videoTrack && (
         <div
-          className={`bg-gray-600 rounded-full absolute transition-opacity ${
+          className={`bg-gray-600 rounded-full absolute transition-opacity user-big-image ${
             member.videoTrack ? "opacity-0" : ""
           }`}
           style={{
