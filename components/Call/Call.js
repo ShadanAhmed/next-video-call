@@ -92,13 +92,13 @@ function Call({ user: currentUser }) {
         if (firebaseUser.uid === currentUser.uid)
           toast.dark(`${firebaseUser.name} joined`, {
             position: "bottom-left",
-            autoClose: 500,
+            autoClose: 1000,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            transition: Flip,
+            transition: Slide,
           });
       });
     } else {

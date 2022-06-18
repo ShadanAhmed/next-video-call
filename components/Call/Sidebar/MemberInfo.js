@@ -4,7 +4,7 @@ const MemberInfo = ({ member, host }) => {
   return (
     <div className="member flex pt-4 unselectable" key={member.userId}>
       <img
-        src={member.imageUrl}
+        src={member.imageUrl + "32"}
         alt="user-image"
         className="w-8 h-8 rounded-full my-auto mx-0"
       />

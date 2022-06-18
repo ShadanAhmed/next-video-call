@@ -3,6 +3,7 @@ import { GrFormClose } from "react-icons/gr";
 import InfoSideBar from "./InfoSideBar";
 import PeopleSideBar from "./PeopleSideBar";
 import ChatSideBar from "./ChatSideBar";
+import Router from "next/router";
 
 const SideBar = ({
   currentSideBarNo,
@@ -17,6 +18,9 @@ const SideBar = ({
   isTabWidth,
   setNewMessage,
 }) => {
+  if (visible) {
+    window.history.replaceState(null, null, `?sideBar=${currentSideBarNo}`);
+  }
   console.log(currentSideBarNo);
   let title;
   if (currentSideBarNo === 1) {
@@ -57,7 +61,13 @@ const SideBar = ({
     >
       <div className="title-continer flex justify-between">
         <h3 className="text-lg unselectable">{title}</h3>
-        <button onClick={close} className="mr-0">
+        <button
+          onClick={() => {
+            window.history.replaceState(null, null, Router.query.channel);
+            close();
+          }}
+          className="mr-0"
+        >
           <GrFormClose className="text-3xl" />
         </button>
       </div>
