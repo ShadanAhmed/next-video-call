@@ -327,7 +327,7 @@ function Call({ user: currentUser }) {
           </div>
           <SideBar
             close={() => setSideBar({ visible: false })}
-            visible={sideBar.visible && Router.query.sideBar != null}
+            visible={sideBar.visible}
             currentSideBarNo={sideBar.current}
             members={members}
             meeting={meeting}
