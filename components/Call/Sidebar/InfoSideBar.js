@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 import { MdContentCopy } from "react-icons/md";
-import { Flip, toast, ToastContainer } from "react-toastify";
+import { Flip, Slide, toast, ToastContainer } from "react-toastify";
 
 const InfoSideBar = () => {
   const Router = useRouter();
@@ -23,7 +23,7 @@ const InfoSideBar = () => {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      transition: Flip,
+      transition: Slide,
     });
   };
 
@@ -37,8 +37,9 @@ const InfoSideBar = () => {
       <button
         className="text-blue-500 text-sm font-bold pt-4 unselectable"
         onClick={() =>
-          copyToClipboard(`https://next-video-call.vercel.app/
-          ${Router.query.channel}`)
+          copyToClipboard(
+            `https://next-video-call.vercel.app/${Router.query.channel}`
+          )
         }
       >
         <span className="text-lg">

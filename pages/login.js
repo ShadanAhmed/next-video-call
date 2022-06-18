@@ -8,7 +8,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { Flip, toast, ToastContainer } from "react-toastify";
+import { Flip, Slide, toast, ToastContainer } from "react-toastify";
 import { injectStyle } from "react-toastify/dist/inject-style";
 import { FcGoogle } from "react-icons/fc";
 
@@ -24,13 +24,13 @@ const Login = () => {
     if (Router.query.st) {
       toast.dark("Login to continue", {
         position: "bottom-left",
-        autoClose: 500,
+        autoClose: 1000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        transition: Flip,
+        transition: Slide,
       });
     }
   }, []);

@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { db } from "../utils/firebase";
 import useFirestore from "../hooks/useFirestore";
 import Constants from "../utils/Constants";
-import { Flip, toast, ToastContainer } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 
 import { injectStyle } from "react-toastify/dist/inject-style";
 
@@ -22,27 +22,27 @@ export default function Home({ user }) {
       injectStyle();
     }
     if (router.query.st == 1) {
-      toast.dark("please enter a valid meeting code", {
+      toast.dark("Please enter a valid meeting code", {
         position: "bottom-left",
-        autoClose: 500,
+        autoClose: 1000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        transition: Flip,
+        transition: Slide,
       });
     }
     if (router.query.st == 2) {
-      toast.dark("already logged in", {
+      toast.dark("Already logged in", {
         position: "bottom-left",
-        autoClose: 500,
+        autoClose: 1000,
         hideProgressBar: true,
         closeOnClick: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        transition: Flip,
+        transition: Slide,
       });
     }
   }, []);
