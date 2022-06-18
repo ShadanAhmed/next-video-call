@@ -16,7 +16,8 @@ export default function Home() {
   const { loading, user, isLoggedIn } = useAuth();
 
   if (loading) return <Loader />;
-  else if (!isLoggedIn) Router.push("/login?st=true");
+  else if (!isLoggedIn)
+    Router.push(`/login?st=true&meetingCode=${Router.query.channel}`);
   return (
     <div>
       <Call user={user} />

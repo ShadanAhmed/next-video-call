@@ -33,19 +33,15 @@ const Login = () => {
         transition: Slide,
       });
     }
+    console.log(Router.query);
   }, []);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user);
-        Router.push("/?st=2");
-      } else {
-        // User is signed out
-        // ...
-        console.log(false);
-      }
-    });
+    const user = auth.currentUser;
+    if (user) {
+      console.log(user);
+      Router.push("/?st=2");
+    }
   }, []);
 
   const signInWithGoogle = () => {
@@ -85,7 +81,14 @@ const Login = () => {
       imageUrl,
     });
 
-    Router.push("/");
+    console.log({ query: Router.query });
+
+    if (Router.query.meetingCode) {
+      Router.push(`/${Router.query.meetingCode}`);
+    }
+    // else {
+    //   Router.push("/");
+    // }
   };
 
   return (
