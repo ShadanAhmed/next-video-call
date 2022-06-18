@@ -28,6 +28,7 @@ import CallGrid from "./CallGrid";
 
 import Loader from "../Loader";
 import Head from "next/head";
+import { Router } from "react-router-dom";
 
 function Call({ user: currentUser }) {
   const router = useRouter();
@@ -326,7 +327,7 @@ function Call({ user: currentUser }) {
           </div>
           <SideBar
             close={() => setSideBar({ visible: false })}
-            visible={sideBar.visible}
+            visible={sideBar.visible && Router.query.sideBar != null}
             currentSideBarNo={sideBar.current}
             members={members}
             meeting={meeting}
