@@ -28,7 +28,7 @@ import CallGrid from "./CallGrid";
 
 import Loader from "../Loader";
 import Head from "next/head";
-import { Router } from "react-router-dom";
+import { Router } from "next/router";
 
 function Call({ user: currentUser }) {
   const router = useRouter();
