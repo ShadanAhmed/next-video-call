@@ -11,6 +11,7 @@ import {
 import { Flip, Slide, toast, ToastContainer } from "react-toastify";
 import { injectStyle } from "react-toastify/dist/inject-style";
 import { FcGoogle } from "react-icons/fc";
+import Head from "next/head";
 
 const Login = () => {
   const [loading, setLoading] = useState(null);
@@ -93,6 +94,12 @@ const Login = () => {
 
   return (
     <div className="container h-screen w-screen bg-gray-700 flex justify-center items-center text-white font-Poppins">
+      <Head>
+        <title>Login - next meet</title>
+        <meta name="description" content="Login to next meet" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="theme-color" content="#1f2937" />
+      </Head>
       <div>
         <button
           className="bg-white text-black p-2 rounded-sm flex items-center"

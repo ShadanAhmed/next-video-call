@@ -19,10 +19,14 @@ const ChatSideBar = ({
       messageContainerRef.current.scrollTop =
         messageContainerRef.current.scrollHeight;
     }
+    console.log({ messages });
   }, [messageContainerRef, messages]);
 
   const sendMessage = async () => {
-    if (message.trim().length == 0) return;
+    let trimmedMessage = message;
+    if (trimmedMessage.trim().length == 0) return;
+
+    console.log({ message });
 
     await rtmChannel.sendMessage({ text: message });
     addMessage({ message, sendBy: currentUserId });
@@ -33,7 +37,7 @@ const ChatSideBar = ({
   return (
     <div className="h-full relative">
       <div
-        className="msg mb-4"
+        className="msg mb-4 md:mb-6"
         ref={messageContainerRef}
         style={{ height: "85%", overflowY: "auto", overflowX: "hidden" }}
       >
@@ -65,8 +69,9 @@ const ChatSideBar = ({
             ) : (
               <></>
             )}
-
-            <p className="pl-2">{message.message}</p>
+            {message.message.split("\n").map((line, index) => (
+              <p key={index}>{line}</p>
+            ))}
           </div>
         ))}
       </div>

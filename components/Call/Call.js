@@ -293,8 +293,9 @@ function Call({ user: currentUser }) {
       >
         <Head>
           <title>Meet - {router.query.channel}</title>
-          <meta name="description" content="Meeting created on shadan meet" />
+          <meta name="description" content="Meeting created on next meet" />
           <link rel="icon" href="/favicon.ico" />
+          <meta name="theme-color" content="#1f2937" />
         </Head>
         <div
           className={`player-container relative m-auto ${
