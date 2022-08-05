@@ -25,7 +25,7 @@ export default function useAuth() {
   }, []);
 
   const logout = async () => {
-    signOut(auth);
+    await signOut(auth);
   };
 
   return {

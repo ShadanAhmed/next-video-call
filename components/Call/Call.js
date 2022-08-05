@@ -309,7 +309,7 @@ function Call({ user: currentUser }) {
                   className="inline"
                 />
                 {"  "}
-                in your browser's address bar and reaload the page 😁.
+                in your browser&apos;s address bar and reaload the page 😁.
               </span>
             </div>
           </div>
