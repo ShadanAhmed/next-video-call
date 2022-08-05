@@ -86,10 +86,9 @@ const Login = () => {
 
     if (Router.query.meetingCode) {
       Router.push(`/${Router.query.meetingCode}`);
+    } else {
+      Router.push("/");
     }
-    // else {
-    //   Router.push("/");
-    // }
   };
 
   return (
