@@ -5,6 +5,8 @@ export default function useAgora(client) {
   const [localAudioTrack, setLocalAudioTrack] = useState(undefined);
   const [joinState, setJoinState] = useState(false);
   const [remoteUsers, setRemoteUsers] = useState([]);
+  const [error, setError] = useState(null);
+
   async function createLocalTracks(audioConfig, videoConfig) {
     const [microphoneTrack, cameraTrack] =
       await AgoraRTC.createMicrophoneAndCameraTracks(audioConfig, videoConfig);
@@ -14,12 +16,16 @@ export default function useAgora(client) {
   }
   async function join(appId, token, channel, uid) {
     if (!client) return;
-    const [microphoneTrack, cameraTrack] = await createLocalTracks();
-    await client.join(appId, channel, token, uid);
-    await client.publish([microphoneTrack, cameraTrack]);
-    window.client = client;
-    window.videoTrack = cameraTrack;
-    setJoinState(true);
+    try {
+      const [microphoneTrack, cameraTrack] = await createLocalTracks();
+      await client.join(appId, channel, token, uid);
+      await client.publish([microphoneTrack, cameraTrack]);
+      window.client = client;
+      window.videoTrack = cameraTrack;
+      setJoinState(true);
+    } catch (e) {
+      setError(e);
+    }
   }
   async function leave() {
     if (localAudioTrack) {
@@ -87,5 +93,6 @@ export default function useAgora(client) {
     toggleMic,
     toggleVideo,
     remoteUsers,
+    error,
   };
 }

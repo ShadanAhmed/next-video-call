@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 
 export default function useAuth() {
@@ -24,9 +24,14 @@ export default function useAuth() {
     return () => dispose();
   }, []);
 
+  const logout = async () => {
+    signOut(auth);
+  };
+
   return {
     user,
     isLoggedIn,
     loading,
+    logout,
   };
 }

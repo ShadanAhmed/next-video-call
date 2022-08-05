@@ -8,11 +8,19 @@ import Constants from "../utils/Constants";
 import { Slide, toast, ToastContainer } from "react-toastify";
 
 import { injectStyle } from "react-toastify/dist/inject-style";
-import { AiOutlineVideoCameraAdd } from "react-icons/ai";
+import {
+  AiOutlineInfoCircle,
+  AiOutlineLogout,
+  AiOutlineUserSwitch,
+  AiOutlineVideoCameraAdd,
+} from "react-icons/ai";
+import ClickAwayListener from "react-click-away-listener";
+import { Router } from "react-router-dom";
 
-export default function Home({ user }) {
+export default function Home({ user, logout }) {
   console.log("user", user);
   const [channel, setChannel] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
   const { updateChannel } = useFirestore(db);
 
@@ -97,6 +105,8 @@ export default function Home({ user }) {
     router.push(`/${channel ? channel : generatedChannel}`);
   };
 
+  useEffect(() => console.log(showPopup), [showPopup]);
+
   return (
     <div className="bg-gray-800">
       <Head>
@@ -109,10 +119,38 @@ export default function Home({ user }) {
         <meta name="theme-color" content="#1f2937" />
       </Head>
 
+      {showPopup ? (
+        <ClickAwayListener onClickAway={() => setShowPopup(false)}>
+          <div className="font-Poppins shadow-md sub-controls flex items-start justify-center p-4 bg-white w-56 rounded-md flex-col absolute top-12 text-black z-40 right-14">
+            <button
+              className="text-2xl flex w-full"
+              onClick={async () => {
+                await logout();
+                router.push(`/login`);
+              }}
+            >
+              <div>
+                <AiOutlineLogout />
+              </div>
+
+              <span className="text-base font-bold ml-4">Logout</span>
+            </button>
+          </div>
+        </ClickAwayListener>
+      ) : null}
+
       <div className=" h-screen">
+        <div className="bg-red w-screen h-16 relative">
+          <img
+            src={user != null ? user.photoURL : ""}
+            onClick={() => setShowPopup(!showPopup)}
+            alt="userImage"
+            className="h-full rounded-full p-2 absolute right-4 top-2"
+          />
+        </div>
         <div className=" mb-4 relative items-center justify-center flex">
           <div
-            className="m-10 flex h-12 collapse-on-tab-width"
+            className="ml-10 mr-10 mt-4 flex h-12 collapse-on-tab-width"
             style={{ width: "min(500px, 90vw)" }}
           >
             <button
@@ -142,6 +180,9 @@ export default function Home({ user }) {
             />
           </div>
         </div>
+        <footer className="text-center text-white absolute bottom-0 w-screen pb-5 text-lg font-Poppins">
+          Made with ❤ by Shadan ahmed
+        </footer>
         <ToastContainer />
       </div>
     </div>

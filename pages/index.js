@@ -13,7 +13,7 @@ const Join = dynamic(
 );
 
 export default function Home() {
-  const { loading, isLoggedIn, user } = useAuth();
+  const { loading, isLoggedIn, user, logout } = useAuth();
 
   if (loading) {
     <Loader />;
@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <div>
-      <Join user={user} />
+      <Join user={user} logout={logout} />
     </div>
   );
 }

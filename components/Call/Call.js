@@ -42,6 +42,7 @@ function Call({ user: currentUser }) {
     toggleVideo,
     joinState,
     remoteUsers,
+    error,
   } = useAgora(client);
 
   const [members, setMembers] = useState([]);
@@ -280,6 +281,42 @@ function Call({ user: currentUser }) {
   }, [currentMessage]);
 
   console.log({ members });
+
+  if (error != null) {
+    console.log(error);
+    return (
+      <div ref={bodyContainer} className="call bg-gray-800">
+        <Head>
+          <title>Meet - {router.query.channel}</title>
+          <meta name="description" content="Meeting created on next meet" />
+          <link rel="icon" href="/favicon.ico" />
+          <meta name="theme-color" content="#1f2937" />
+        </Head>
+
+        <div className=" h-screen">
+          <div className=" mb-4 relative items-center justify-center flex">
+            <div
+              className="m-10 flex h-12 flex-col text-white text-Poppins"
+              style={{ width: "min(500px, 90vw)" }}
+            >
+              <span className="text-left pb-5 text-lg pl-1">
+                We require access to your camera and microphone. Click the
+                camera blocked icon{"  "}
+                <img
+                  alt=""
+                  src="https://www.gstatic.com/meet/ic_blocked_camera_dark_f401bc8ec538ede48315b75286c1511b.svg"
+                  data-iml="16652"
+                  className="inline"
+                />
+                {"  "}
+                in your browser's address bar and reaload the page 😁.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return <Loader />;
