@@ -15,7 +15,6 @@ import {
   AiOutlineVideoCameraAdd,
 } from "react-icons/ai";
 import ClickAwayListener from "react-click-away-listener";
-import { Router } from "react-router-dom";
 
 export default function Home({ user, logout }) {
   console.log("user", user);
