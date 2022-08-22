@@ -179,9 +179,6 @@ export default function Home({ user, logout }) {
             />
           </div>
         </div>
-        <footer className="text-center text-white absolute bottom-0 w-screen pb-3 md:pb-5 text-lg font-Poppins">
-          Made with ❤ by Shadan ahmed
-        </footer>
         <ToastContainer />
       </div>
     </div>
