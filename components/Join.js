@@ -120,9 +120,9 @@ export default function Home({ user, logout }) {
 
       {showPopup ? (
         <ClickAwayListener onClickAway={() => setShowPopup(false)}>
-          <div className="font-Poppins shadow-md sub-controls flex items-start justify-center p-4 bg-white w-56 rounded-md flex-col absolute top-12 text-black z-40 right-14">
+          <div className="font-Poppins shadow-md sub-controls flex items-start justify-center  bg-white w-56 rounded-md flex-col absolute top-12 text-black z-40 right-14">
             <button
-              className="text-2xl flex w-full"
+              className="text-2xl flex w-full p-4"
               onClick={async () => {
                 await logout();
                 router.push(`/login`);
@@ -179,7 +179,7 @@ export default function Home({ user, logout }) {
             />
           </div>
         </div>
-        <footer className="text-center text-white absolute bottom-0 w-screen pb-5 text-lg font-Poppins">
+        <footer className="text-center text-white absolute bottom-0 w-screen pb-3 md:pb-5 text-lg font-Poppins">
           Made with ❤ by Shadan ahmed
         </footer>
         <ToastContainer />
